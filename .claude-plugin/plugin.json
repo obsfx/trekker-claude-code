@@ -22,7 +22,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "trekker --toon quickstart"
+            "command": "bash ${CLAUDE_PLUGIN_ROOT}/hooks/session-start.sh"
           }
         ]
       }
@@ -33,7 +33,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "trekker --toon quickstart"
+            "command": "bash ${CLAUDE_PLUGIN_ROOT}/hooks/pre-compact.sh"
           }
         ]
       }
