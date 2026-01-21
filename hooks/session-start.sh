@@ -14,11 +14,32 @@ echo "# Trekker Session Context"
 echo ""
 
 # ============================================================================
+# Helper: Extract count from toon format (first line shows [count])
+# ============================================================================
+get_toon_count() {
+    head -1 | grep -o '^\[[0-9]*\]' | tr -d '[]'
+}
+
+# Helper: Extract task IDs from toon list format (CSV rows after header)
+get_toon_task_ids() {
+    tail -n +2 | cut -d',' -f1 | sed 's/^[[:space:]]*//' | grep -E '^TREK-[0-9]+$'
+}
+
+# ============================================================================
 # SECTION 1: State Summary (Quick Overview)
 # ============================================================================
-TODO=$(trekker --json task list --status todo 2>/dev/null | grep -o '"id"' | wc -l | tr -d ' ')
-IN_PROG=$(trekker --json task list --status in_progress 2>/dev/null | grep -o '"id"' | wc -l | tr -d ' ')
-EPIC_COUNT=$(trekker --json epic list 2>/dev/null | grep -o '"id"' | wc -l | tr -d ' ')
+TODO_OUTPUT=$(trekker --toon task list --status todo 2>/dev/null)
+IN_PROG_OUTPUT=$(trekker --toon task list --status in_progress 2>/dev/null)
+EPIC_OUTPUT=$(trekker --toon epic list 2>/dev/null)
+
+TODO=$(echo "$TODO_OUTPUT" | get_toon_count)
+IN_PROG=$(echo "$IN_PROG_OUTPUT" | get_toon_count)
+EPIC_COUNT=$(echo "$EPIC_OUTPUT" | get_toon_count)
+
+# Default to 0 if empty
+TODO=${TODO:-0}
+IN_PROG=${IN_PROG:-0}
+EPIC_COUNT=${EPIC_COUNT:-0}
 
 echo "**State**: $IN_PROG in-progress | $TODO todo | $EPIC_COUNT epics"
 echo ""
@@ -26,8 +47,7 @@ echo ""
 # ============================================================================
 # SECTION 2: Resume In-Progress Work
 # ============================================================================
-IN_PROGRESS=$(trekker --json task list --status in_progress 2>/dev/null)
-IN_PROGRESS_COUNT=$(echo "$IN_PROGRESS" | grep -o '"id"' | wc -l | tr -d ' ')
+IN_PROGRESS_COUNT="$IN_PROG"
 
 if [ "$IN_PROGRESS_COUNT" -gt 0 ]; then
     echo "## Resume In-Progress Work"
@@ -39,14 +59,14 @@ if [ "$IN_PROGRESS_COUNT" -gt 0 ]; then
     echo "### Task Context"
     echo ""
 
-    for task_id in $(echo "$IN_PROGRESS" | grep -o '"id":"[^"]*"' | cut -d'"' -f4); do
+    for task_id in $(echo "$IN_PROG_OUTPUT" | get_toon_task_ids); do
         echo "#### $task_id"
         echo ""
 
-        # Get task title and description
-        TASK_JSON=$(trekker --json task show "$task_id" 2>/dev/null)
-        TASK_TITLE=$(echo "$TASK_JSON" | grep -o '"title":"[^"]*"' | cut -d'"' -f4 | head -1)
-        TASK_DESC=$(echo "$TASK_JSON" | grep -o '"description":"[^"]*"' | cut -d'"' -f4 | head -1)
+        # Get task title and description from toon format
+        TASK_OUTPUT=$(trekker --toon task show "$task_id" 2>/dev/null)
+        TASK_TITLE=$(echo "$TASK_OUTPUT" | grep '^title:' | cut -d' ' -f2-)
+        TASK_DESC=$(echo "$TASK_OUTPUT" | grep '^description:' | cut -d' ' -f2-)
 
         if [ -n "$TASK_TITLE" ]; then
             echo "**Title**: $TASK_TITLE"
@@ -68,7 +88,8 @@ if [ "$IN_PROGRESS_COUNT" -gt 0 ]; then
         echo ""
 
         # Check for dependencies
-        DEPS=$(trekker --json dep list "$task_id" 2>/dev/null | grep -o '"id"' | wc -l | tr -d ' ')
+        DEP_OUTPUT=$(trekker --toon dep list "$task_id" 2>/dev/null)
+        DEPS=$(echo "$DEP_OUTPUT" | grep -c '^  - ')
         if [ "$DEPS" -gt 0 ]; then
             echo "**Has $DEPS dependencies** - run \`trekker dep list $task_id\` to view"
             echo ""

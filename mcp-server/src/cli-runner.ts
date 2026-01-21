@@ -8,10 +8,9 @@ export async function runTrekker<T = unknown>(
   args: string[],
   options: CliRunnerOptions = {}
 ): Promise<TrekkerResult<T>> {
-  const { cwd = process.cwd(), json = true, toon = false } = options;
+  const { cwd = process.cwd(), toon = true } = options;
 
   const fullArgs: string[] = [];
-  if (json) fullArgs.push('--json');
   if (toon) fullArgs.push('--toon');
   fullArgs.push(...args);
 
@@ -21,17 +20,8 @@ export async function runTrekker<T = unknown>(
       timeout: 30000,
     });
 
-    if (stderr && !json) {
+    if (stderr) {
       console.error('trekker stderr:', stderr);
-    }
-
-    if (json && stdout.trim()) {
-      try {
-        const data = JSON.parse(stdout) as T;
-        return { success: true, data };
-      } catch {
-        return { success: true, data: stdout as unknown as T };
-      }
     }
 
     return { success: true, data: stdout as unknown as T };
@@ -46,7 +36,7 @@ export async function runTrekker<T = unknown>(
 
 export async function runTrekkerText(
   args: string[],
-  options: Omit<CliRunnerOptions, 'json'> = {}
+  options: CliRunnerOptions = {}
 ): Promise<TrekkerResult<string>> {
-  return runTrekker<string>(args, { ...options, json: false });
+  return runTrekker<string>(args, options);
 }

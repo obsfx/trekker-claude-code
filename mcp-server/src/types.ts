@@ -51,6 +51,5 @@ export interface TrekkerResult<T> {
 
 export interface CliRunnerOptions {
   cwd?: string;
-  json?: boolean;
   toon?: boolean;
 }

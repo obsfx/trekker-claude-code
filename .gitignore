@@ -5,3 +5,4 @@ node_modules/
 
 # Ignore dist except mcp-server (bundled with plugin)
 !mcp-server/dist/
+docs/
