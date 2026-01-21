@@ -45,17 +45,7 @@ git clone https://github.com/obsfx/trekker-claude-code.git
 ln -s $(pwd)/trekker-claude-code ~/.claude/plugins/trekker
 ```
 
-### Step 3: Build the MCP Server
-
-The MCP server needs to be built after installation:
-
-```bash
-cd ~/.claude/plugins/trekker/mcp-server
-pnpm install
-pnpm build
-```
-
-### Step 4: Configure MCP Server
+### Step 3: Configure MCP Server
 
 Add the MCP server to your Claude Code settings.
 
@@ -65,8 +55,8 @@ Add the MCP server to your Claude Code settings.
 {
   "mcpServers": {
     "trekker": {
-      "command": "node",
-      "args": ["~/.claude/plugins/trekker/mcp-server/dist/index.js"]
+      "command": "npx",
+      "args": ["@obsfx/trekker-mcp"]
     }
   }
 }
@@ -78,14 +68,14 @@ Add the MCP server to your Claude Code settings.
 {
   "mcpServers": {
     "trekker": {
-      "command": "node",
-      "args": ["/Users/YOUR_USERNAME/.claude/plugins/trekker/mcp-server/dist/index.js"]
+      "command": "npx",
+      "args": ["@obsfx/trekker-mcp"]
     }
   }
 }
 ```
 
-### Step 5: Initialize Trekker in Your Project
+### Step 4: Initialize Trekker in Your Project
 
 ```bash
 cd your-project
@@ -125,7 +115,7 @@ The MCP server exposes trekker functionality as tools:
 | System | `trekker_quickstart` | Get workflow guide |
 | System | `trekker_wipe` | Wipe database |
 
-### Slash Commands (12 commands)
+### Slash Commands (13 commands)
 
 | Command | Description |
 |---------|-------------|
@@ -141,10 +131,11 @@ The MCP server exposes trekker functionality as tools:
 | `/trekker:comment` | Add comment to task |
 | `/trekker:deps` | Manage dependencies |
 | `/trekker:history` | View audit trail of changes |
+| `/trekker:task-agent` | Run autonomous task agent |
 
 ### Task Agent
 
-The `task-agent` provides autonomous task completion:
+The task agent (`/trekker:task-agent`) provides autonomous task completion:
 
 1. **Discovery** - Find ready tasks
 2. **Engagement** - Select and start a task
@@ -152,6 +143,8 @@ The `task-agent` provides autonomous task completion:
 4. **Documentation** - Track progress and discoveries
 5. **Closure** - Add summary and mark complete
 6. **Iteration** - Move to next task
+
+Invoke with `/trekker:task-agent` to let Claude work through tasks autonomously.
 
 ### Hooks
 
@@ -221,7 +214,7 @@ trekker-claude-code/
 │   │   └── tools/            # MCP tool definitions
 │   ├── package.json
 │   └── tsconfig.json
-├── commands/                 # Slash command definitions (12 commands)
+├── commands/                 # Slash command definitions (13 commands)
 ├── agents/
 │   └── task-agent.md         # Task completion agent
 ├── skills/
@@ -259,13 +252,12 @@ pnpm dev
 
 1. Verify trekker CLI is installed: `trekker --version`
 2. Check plugin is in correct location: `ls ~/.claude/plugins/trekker`
-3. Ensure MCP server is built: `ls ~/.claude/plugins/trekker/mcp-server/dist/index.js`
 
 ### MCP tools not available
 
-1. Check MCP server config in settings.json
+1. Check MCP server config in settings.json uses `npx @obsfx/trekker-mcp`
 2. Restart Claude Code after configuration changes
-3. Verify the path to index.js is correct (use absolute path)
+3. Verify npx can run the package: `npx @obsfx/trekker-mcp --help`
 
 ### Hooks not running
 

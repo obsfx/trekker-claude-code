@@ -7,17 +7,32 @@
   "bin": {
     "trekker-mcp": "dist/index.js"
   },
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "tsc",
     "dev": "tsc --watch",
-    "start": "node dist/index.js"
+    "start": "node dist/index.js",
+    "prepublishOnly": "npm run build"
   },
   "keywords": [
     "mcp",
     "trekker",
     "issue-tracker",
-    "ai-workflow"
+    "ai-workflow",
+    "claude",
+    "anthropic"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/obsfx/trekker-claude-code.git",
+    "directory": "mcp-server"
+  },
+  "bugs": {
+    "url": "https://github.com/obsfx/trekker-claude-code/issues"
+  },
+  "homepage": "https://github.com/obsfx/trekker-claude-code#readme",
   "author": "Omer Can Balandi",
   "license": "MIT",
   "dependencies": {
