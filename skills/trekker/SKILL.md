@@ -1,7 +1,7 @@
 ---
 name: trekker
 description: Persistent task memory for AI agents across sessions
-version: 0.1.5
+version: 0.1.6
 ---
 
 # Trekker - Issue Tracker for AI Agents
@@ -28,12 +28,18 @@ Trekker provides persistent task memory across sessions. Unlike TodoWrite which 
 
 ## Strict Usage Rules
 
-### CRITICAL: No Shorthand Commands
+### CRITICAL: Skills vs CLI Commands
 
-**WRONG:** `trekker start`, `trekker blocked`, `trekker done`
-**RIGHT:** `trekker task update <id> -s in_progress`
+**Skills** (invoke via Skill tool): `/trekker:start`, `/trekker:blocked`, `/trekker:done`
+**CLI commands** (run in terminal): `trekker task update <id> -s in_progress`
 
-Skill names like `/start` are NOT CLI commands. Always use full `trekker task update` syntax.
+| WRONG | RIGHT |
+|-------|-------|
+| `trekker start` | `trekker task update <id> -s in_progress` |
+| `trekker blocked` | `trekker task update <id> -s blocked` |
+| `trekker done` | `trekker task update <id> -s completed` |
+
+**Never mix them:** `/trekker:start` is a skill workflow, `trekker` is the CLI binary.
 
 ### MUST DO
 

@@ -1,9 +1,11 @@
 ---
-name: epic
+name: trekker:epic
 description: Manage epics
 ---
 
 Create, list, or show epics.
+
+**IMPORTANT**: `/trekker:epic` is a skill (invoke via Skill tool), NOT a bash command. Use `trekker epic` CLI commands as shown below.
 
 ## Subcommands
 

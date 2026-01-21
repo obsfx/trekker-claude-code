@@ -1,9 +1,11 @@
 ---
-name: deps
+name: trekker:deps
 description: Manage task dependencies
 ---
 
 Add, remove, or list dependencies between tasks.
+
+**IMPORTANT**: `/trekker:deps` is a skill (invoke via Skill tool), NOT a bash command. Use `trekker dep` CLI commands as shown below.
 
 ## Subcommands
 

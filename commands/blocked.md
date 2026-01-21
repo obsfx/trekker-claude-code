@@ -1,11 +1,11 @@
 ---
-name: blocked
+name: trekker:blocked
 description: Mark a task as blocked
 ---
 
 Mark a task as blocked when it cannot proceed.
 
-**NOTE**: This is a skill, not a bash command. There is no `trekker task blocked` or `trekker task set-status` command. Use `trekker task update` as shown below.
+**IMPORTANT**: `/trekker:blocked` is a skill (invoke via Skill tool), NOT a bash command. There is no `trekker blocked` CLI command. Use `trekker task update` as shown below.
 
 ## Arguments
 

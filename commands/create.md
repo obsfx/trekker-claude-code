@@ -1,9 +1,11 @@
 ---
-name: create
+name: trekker:create
 description: Create a new task interactively
 ---
 
 Create a new task in trekker.
+
+**IMPORTANT**: `/trekker:create` is a skill (invoke via Skill tool), NOT a bash command. Use `trekker task create` CLI as shown below.
 
 ## Interactive Flow
 

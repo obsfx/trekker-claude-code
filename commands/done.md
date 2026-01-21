@@ -1,11 +1,11 @@
 ---
-name: done
+name: trekker:done
 description: Complete a task with summary
 ---
 
 Mark a task as completed with a summary comment.
 
-**NOTE**: This is a skill, not a bash command. There is no `trekker task done` command. Use `trekker task update` as shown below.
+**IMPORTANT**: `/trekker:done` is a skill (invoke via Skill tool), NOT a bash command. There is no `trekker done` CLI command. Use `trekker task update` as shown below.
 
 ## Arguments
 

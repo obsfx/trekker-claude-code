@@ -1,9 +1,11 @@
 ---
-name: list
+name: trekker:list
 description: List tasks with optional filters
 ---
 
 List tasks in trekker with optional filtering.
+
+**IMPORTANT**: `/trekker:list` is a skill (invoke via Skill tool), NOT a bash command. Use `trekker task list` CLI as shown below.
 
 ## Options
 

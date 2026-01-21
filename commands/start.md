@@ -1,11 +1,11 @@
 ---
-name: start
+name: trekker:start
 description: Start working on a task
 ---
 
 Begin working on a task by setting its status to in_progress.
 
-**NOTE**: This is a skill, not a bash command. There is no `trekker task start` command. Use `trekker task update` as shown below.
+**IMPORTANT**: `/trekker:start` is a skill (invoke via Skill tool), NOT a bash command. There is no `trekker start` CLI command. Use `trekker task update` as shown below.
 
 ## Arguments
 

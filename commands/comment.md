@@ -1,9 +1,11 @@
 ---
-name: comment
+name: trekker:comment
 description: Add a comment to a task
 ---
 
 Add a comment to document progress or context.
+
+**IMPORTANT**: `/trekker:comment` is a skill (invoke via Skill tool), NOT a bash command. Use `trekker comment add` CLI as shown below.
 
 ## Arguments
 
