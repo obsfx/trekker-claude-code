@@ -1,7 +1,7 @@
 ---
 name: trekker
 description: Persistent task memory for AI agents across sessions
-version: 0.1.4
+version: 0.1.5
 ---
 
 # Trekker - Issue Tracker for AI Agents
@@ -37,14 +37,15 @@ Skill names like `/start` are NOT CLI commands. Always use full `trekker task up
 
 ### MUST DO
 
-1. **Set status `in_progress` before starting work** on any task
-2. **Add summary comment before marking `completed`**
-3. **Search before creating** - avoid duplicates
-4. **One task `in_progress` at a time** - complete current work first
-5. **Use `--toon` flag** for programmatic output to save tokens
-6. **Reference tasks by ID** (e.g., TREK-1, EPIC-1) in discussions
-7. **Add checkpoint comment before context reset** with: what's done, what's next, files modified
-8. **Write meaningful descriptions** - tasks without context are useless to future sessions
+1. **Search before starting new work** - recall past decisions and avoid duplicate effort
+2. **Set status `in_progress` before starting work** on any task
+3. **Add summary comment before marking `completed`**
+4. **Search before creating** - avoid duplicates
+5. **One task `in_progress` at a time** - complete current work first
+6. **Use `--toon` flag** for programmatic output to save tokens
+7. **Reference tasks by ID** (e.g., TREK-1, EPIC-1) in discussions
+8. **Add checkpoint comment before context reset** with: what's done, what's next, files modified
+9. **Write meaningful descriptions** - tasks without context are useless to future sessions
 
 ### MUST NOT DO
 
@@ -83,6 +84,25 @@ trekker --toon task list --status in_progress
 # Get context from comments
 trekker comment list <task-id>
 ```
+
+### Starting New Work (Search First)
+
+**ALWAYS search before starting new tasks** to recall past decisions, avoid duplicate work, and build on existing context:
+
+```bash
+# Search for related past work
+trekker search "authentication"
+trekker search "login bug"
+
+# Check completed tasks for context
+trekker --toon task list --status completed
+```
+
+**Why search matters:**
+- Past tasks contain solutions and decisions you've forgotten
+- Avoid re-investigating already-solved problems
+- Find related code changes and file locations
+- Build on previous work instead of starting from scratch
 
 ### Working on Tasks
 
