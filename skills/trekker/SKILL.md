@@ -1,7 +1,7 @@
 ---
 name: trekker
 description: Persistent task memory for AI agents across sessions
-version: 0.1.7
+version: 0.2.5
 ---
 
 # Trekker - Issue Tracker for AI Agents

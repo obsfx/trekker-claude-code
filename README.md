@@ -94,52 +94,53 @@ trekker init
 
 ## Features
 
-### MCP Tools (17 tools)
+### MCP Tools (24 tools)
 
 The MCP server exposes trekker functionality as tools:
 
-| Tool | Description |
-|------|-------------|
-| `trekker_task_create` | Create a new task |
-| `trekker_task_list` | List tasks with filters |
-| `trekker_task_show` | Show task details |
-| `trekker_task_update` | Update task fields |
-| `trekker_task_delete` | Delete a task |
-| `trekker_epic_create` | Create an epic |
-| `trekker_epic_list` | List epics |
-| `trekker_epic_show` | Show epic details |
-| `trekker_epic_update` | Update an epic |
-| `trekker_epic_delete` | Delete an epic |
-| `trekker_subtask_create` | Create a subtask |
-| `trekker_subtask_list` | List subtasks |
-| `trekker_subtask_update` | Update a subtask |
-| `trekker_subtask_delete` | Delete a subtask |
-| `trekker_comment_add` | Add a comment |
-| `trekker_comment_list` | List comments |
-| `trekker_comment_update` | Update a comment |
-| `trekker_comment_delete` | Delete a comment |
-| `trekker_dep_add` | Add a dependency |
-| `trekker_dep_remove` | Remove a dependency |
-| `trekker_dep_list` | List dependencies |
-| `trekker_init` | Initialize trekker |
-| `trekker_quickstart` | Get workflow guide |
-| `trekker_wipe` | Wipe database |
+| Category | Tool | Description |
+|----------|------|-------------|
+| Task | `trekker_task_create` | Create a new task |
+| Task | `trekker_task_list` | List tasks with filters |
+| Task | `trekker_task_show` | Show task details |
+| Task | `trekker_task_update` | Update task fields |
+| Task | `trekker_task_delete` | Delete a task |
+| Epic | `trekker_epic_create` | Create an epic |
+| Epic | `trekker_epic_list` | List epics |
+| Epic | `trekker_epic_show` | Show epic details |
+| Epic | `trekker_epic_update` | Update an epic |
+| Epic | `trekker_epic_delete` | Delete an epic |
+| Subtask | `trekker_subtask_create` | Create a subtask |
+| Subtask | `trekker_subtask_list` | List subtasks |
+| Subtask | `trekker_subtask_update` | Update a subtask |
+| Subtask | `trekker_subtask_delete` | Delete a subtask |
+| Comment | `trekker_comment_add` | Add a comment |
+| Comment | `trekker_comment_list` | List comments |
+| Comment | `trekker_comment_update` | Update a comment |
+| Comment | `trekker_comment_delete` | Delete a comment |
+| Dependency | `trekker_dep_add` | Add a dependency |
+| Dependency | `trekker_dep_remove` | Remove a dependency |
+| Dependency | `trekker_dep_list` | List dependencies |
+| System | `trekker_init` | Initialize trekker |
+| System | `trekker_quickstart` | Get workflow guide |
+| System | `trekker_wipe` | Wipe database |
 
-### Slash Commands (11 commands)
+### Slash Commands (12 commands)
 
 | Command | Description |
 |---------|-------------|
-| `/prime` | Load workflow context |
-| `/create` | Interactive task creation |
-| `/list` | List tasks with filters |
-| `/show` | Show task details |
-| `/ready` | Find unblocked work |
-| `/start` | Begin working on a task |
-| `/done` | Complete task with summary |
-| `/blocked` | Mark task as blocked |
-| `/epic` | Manage epics |
-| `/comment` | Add comment to task |
-| `/deps` | Manage dependencies |
+| `/trekker:prime` | Load workflow context |
+| `/trekker:create` | Interactive task creation |
+| `/trekker:list` | List tasks with filters |
+| `/trekker:show` | Show task details |
+| `/trekker:ready` | Find unblocked work |
+| `/trekker:start` | Begin working on a task |
+| `/trekker:done` | Complete task with summary |
+| `/trekker:blocked` | Mark task as blocked |
+| `/trekker:epic` | Manage epics |
+| `/trekker:comment` | Add comment to task |
+| `/trekker:deps` | Manage dependencies |
+| `/trekker:history` | View audit trail of changes |
 
 ### Task Agent
 
@@ -191,9 +192,10 @@ trekker task update TREK-1 -s completed
 In Claude Code:
 
 ```
-/ready          # Find tasks to work on
-/start TREK-1   # Start a task
-/done TREK-1    # Complete with summary
+/trekker:ready          # Find tasks to work on
+/trekker:start TREK-1   # Start a task
+/trekker:done TREK-1    # Complete with summary
+/trekker:history        # View recent changes
 ```
 
 ### Context Preservation
@@ -219,7 +221,7 @@ trekker-claude-code/
 │   │   └── tools/            # MCP tool definitions
 │   ├── package.json
 │   └── tsconfig.json
-├── commands/                 # Slash command definitions
+├── commands/                 # Slash command definitions (12 commands)
 ├── agents/
 │   └── task-agent.md         # Task completion agent
 ├── skills/
@@ -231,6 +233,7 @@ trekker-claude-code/
 │   ├── session-start.sh      # SessionStart hook script
 │   └── pre-compact.sh        # PreCompact hook script
 └── docs/
+    ├── state-management.md   # SQLite persistence and conflict handling
     └── plans/                # Design documents
 ```
 
