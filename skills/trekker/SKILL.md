@@ -1,7 +1,7 @@
 ---
 name: trekker
 description: Persistent task memory for AI agents across sessions
-version: 0.1.3
+version: 0.1.4
 ---
 
 # Trekker - Issue Tracker for AI Agents
@@ -104,6 +104,25 @@ trekker task update <task-id> -s completed
 trekker comment add <task-id> -a "claude" -c "Checkpoint: done X. Next: Y. Files: a.ts, b.ts"
 ```
 
+### Completing Epics (Keep Board Clean)
+
+When all tasks in an epic are done, use `epic complete` to archive everything at once:
+
+```bash
+# Complete epic and archive all its tasks/subtasks
+trekker epic complete <epic-id>
+```
+
+**Why this matters:**
+- Keeps kanban board focused on active work
+- Archived tasks remain searchable but don't clutter views
+- Single command vs manually archiving each task
+
+**When to use:**
+- All tasks under the epic are completed
+- Feature/milestone is fully delivered
+- User confirms epic is done
+
 ---
 
 ## Key Commands
@@ -118,6 +137,7 @@ trekker comment add <task-id> -a "claude" -c "Checkpoint: done X. Next: Y. Files
 | `trekker dep add <id> <depends-on>` | Add dependency |
 | `trekker search "<query>"` | Full-text search |
 | `trekker history --entity <id>` | View change history |
+| `trekker epic complete <epic-id>` | Complete epic & archive all tasks |
 
 **Need more details?** Run `trekker quickstart` for full command syntax and examples.
 
