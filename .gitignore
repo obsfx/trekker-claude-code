@@ -1,5 +1,7 @@
 node_modules/
-dist/
 *.log
 .DS_Store
 .trekker/
+
+# Ignore dist except mcp-server (bundled with plugin)
+!mcp-server/dist/

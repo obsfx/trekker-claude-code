@@ -1,0 +1,3 @@
+import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
+export declare function registerCommentTools(server: McpServer): void;
+//# sourceMappingURL=comment.d.ts.map

@@ -35,6 +35,8 @@ Or in Claude Code interactive mode:
 /plugin install trekker
 ```
 
+The MCP server is bundled with the plugin and auto-configured.
+
 #### Option B: Manual Installation
 
 ```bash
@@ -45,37 +47,7 @@ git clone https://github.com/obsfx/trekker-claude-code.git
 ln -s $(pwd)/trekker-claude-code ~/.claude/plugins/trekker
 ```
 
-### Step 3: Configure MCP Server
-
-Add the MCP server to your Claude Code settings.
-
-**For Claude Code CLI** (`~/.claude/settings.json`):
-
-```json
-{
-  "mcpServers": {
-    "trekker": {
-      "command": "npx",
-      "args": ["@obsfx/trekker-mcp"]
-    }
-  }
-}
-```
-
-**For Claude Desktop** (`~/Library/Application Support/Claude/claude_desktop_config.json` on macOS):
-
-```json
-{
-  "mcpServers": {
-    "trekker": {
-      "command": "npx",
-      "args": ["@obsfx/trekker-mcp"]
-    }
-  }
-}
-```
-
-### Step 4: Initialize Trekker in Your Project
+### Step 3: Initialize Trekker in Your Project
 
 ```bash
 cd your-project
@@ -255,9 +227,9 @@ pnpm dev
 
 ### MCP tools not available
 
-1. Check MCP server config in settings.json uses `npx @obsfx/trekker-mcp`
-2. Restart Claude Code after configuration changes
-3. Verify npx can run the package: `npx @obsfx/trekker-mcp --help`
+1. Verify plugin is installed: `ls ~/.claude/plugins/trekker`
+2. Check MCP server exists: `ls ~/.claude/plugins/trekker/mcp-server/dist/index.js`
+3. Restart Claude Code after installation
 
 ### Hooks not running
 
