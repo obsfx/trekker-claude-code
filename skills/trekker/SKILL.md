@@ -1,7 +1,7 @@
 ---
 name: trekker
 description: Persistent task memory for AI agents across sessions
-version: 0.1.2
+version: 0.1.3
 ---
 
 # Trekker - Issue Tracker for AI Agents
@@ -28,6 +28,13 @@ Trekker provides persistent task memory across sessions. Unlike TodoWrite which 
 
 ## Strict Usage Rules
 
+### CRITICAL: No Shorthand Commands
+
+**WRONG:** `trekker start`, `trekker blocked`, `trekker done`
+**RIGHT:** `trekker task update <id> -s in_progress`
+
+Skill names like `/start` are NOT CLI commands. Always use full `trekker task update` syntax.
+
 ### MUST DO
 
 1. **Set status `in_progress` before starting work** on any task
@@ -37,6 +44,7 @@ Trekker provides persistent task memory across sessions. Unlike TodoWrite which 
 5. **Use `--toon` flag** for programmatic output to save tokens
 6. **Reference tasks by ID** (e.g., TREK-1, EPIC-1) in discussions
 7. **Add checkpoint comment before context reset** with: what's done, what's next, files modified
+8. **Write meaningful descriptions** - tasks without context are useless to future sessions
 
 ### MUST NOT DO
 
@@ -111,8 +119,6 @@ trekker comment add <task-id> -a "claude" -c "Checkpoint: done X. Next: Y. Files
 | `trekker search "<query>"` | Full-text search |
 | `trekker history --entity <id>` | View change history |
 
-**IMPORTANT**: Skill names (e.g., `/start`, `/blocked`) are NOT CLI commands. Always use `trekker task update <id> -s <status>` to change status.
-
 **Need more details?** Run `trekker quickstart` for full command syntax and examples.
 
 ---
@@ -127,18 +133,42 @@ Tasks: `todo`, `in_progress`, `completed`, `wont_fix`, `archived`
 
 ---
 
-## Naming Conventions
+## Task Quality Requirements (MANDATORY)
 
-### Task Titles
-- Start with verb: "Implement", "Fix", "Add", "Update", "Remove"
-- Be specific: "Fix login failure with special characters" not "Fix login"
-- Include scope: "Add validation to user registration form"
+Future sessions depend entirely on what you write. Low-quality tasks waste time.
 
-### Comments
-- Progress: "Progress: completed X, working on Y"
-- Summary: "Summary: implemented X in files A, B. Changes: ..."
-- Checkpoint: "Checkpoint: done X. Next: Y. Files: a.ts, b.ts"
-- Blocker: "Blocked: waiting on external API documentation"
+### Task Titles - Be Specific
+
+| BAD (vague) | GOOD (actionable) |
+|-------------|-------------------|
+| "Fix bug" | "Fix null pointer in UserService.getById when user not found" |
+| "Add feature" | "Add email validation to registration form with RFC 5322 regex" |
+| "Update code" | "Refactor PaymentProcessor to use strategy pattern for providers" |
+| "Work on auth" | "Implement JWT refresh token rotation with 7-day expiry" |
+
+### Task Descriptions - Provide Context
+
+Every task MUST have a description (`-d` flag) that answers:
+- **What**: What exactly needs to be done?
+- **Why**: Why is this needed? What problem does it solve?
+- **Where**: Which files/components are involved?
+
+```bash
+# BAD
+trekker task create -t "Fix login"
+
+# GOOD
+trekker task create -t "Fix login failure when password contains special chars" \
+  -d "Users with & or < in passwords get 500 error. Issue in auth/validator.ts line 42. Need to escape before SQL query."
+```
+
+### Comments - Be Detailed
+
+| BAD | GOOD |
+|-----|------|
+| "Working on it" | "Progress: Added input sanitization to validator.ts. Testing edge cases next." |
+| "Done" | "Summary: Fixed by escaping special chars in sanitizePassword(). Added tests in validator.test.ts. Verified with manual testing." |
+| "Stuck" | "Blocked: Need DB admin access to verify fix in staging. Contacted @ops in Slack." |
 
 ---
 
