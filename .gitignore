@@ -4,5 +4,7 @@ node_modules/
 .trekker/
 
 # Ignore dist except mcp-server (bundled with plugin)
-!mcp-server/dist/
+mcp-server/dist/
+
 docs/
+.idea/
