@@ -7,10 +7,10 @@ description: PRIMARY tool for gathering context. Find tasks by meaning, not keyw
 
 Before starting ANY work:
 ```bash
-trekker semantic-search "<what you're about to do>"
+trekker search "<what you're about to do>"
 ```
 
-This finds related past work even when terminology differs.
+This finds related past work even when terminology differs. Search uses semantic mode by default.
 
 ## When to Use (ALWAYS)
 
@@ -24,30 +24,33 @@ This finds related past work even when terminology differs.
 
 | User Says | Command | Finds |
 |-----------|---------|-------|
-| "login problems" | `trekker semantic-search "login problems"` | "authentication bug", "OAuth expired" |
-| "app is slow" | `trekker semantic-search "performance issues"` | "latency", "optimization" |
-| "fix the auth" | `trekker semantic-search "authentication"` | Related auth work |
+| "login problems" | `trekker search "login problems"` | "authentication bug", "OAuth expired" |
+| "app is slow" | `trekker search "performance issues"` | "latency", "optimization" |
+| "fix the auth" | `trekker search "authentication"` | Related auth work |
 
 ## Commands
 
 ```bash
-# Natural language query
-trekker semantic-search "user cannot access account"
+# Semantic search (default mode)
+trekker search "user cannot access account"
 
 # Filter by type
-trekker semantic-search "deployment issues" --type task
+trekker search "deployment issues" --type task
 
 # Filter by status
-trekker semantic-search "memory leak" --status todo,in_progress
+trekker search "memory leak" --status todo,in_progress
 
-# Higher precision threshold
-trekker semantic-search "caching" --threshold 0.7
+# Keyword search if needed
+trekker search "exact error message" --mode keyword
+
+# Hybrid (combines both)
+trekker search "caching" --mode hybrid
 ```
 
 ## Workflow: Before ANY Task Operation
 
 ```
-1. SEARCH: trekker semantic-search "<description>"
+1. SEARCH: trekker search "<description>"
 2. REVIEW: Check if similar work exists
 3. DECIDE: Update existing OR create new
 4. SYNC: Mirror to TodoWrite after Trekker

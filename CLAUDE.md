@@ -16,10 +16,12 @@ This plugin enforces a **search-first workflow**. The core principle:
 
 **Before ANY action** (creating tasks, starting work, investigating issues):
 ```bash
-trekker search "<keywords>"
+trekker search "<query>"           # Semantic search (default)
+trekker search "<query>" --mode keyword  # Exact keyword match
+trekker search "<query>" --mode hybrid   # Combined approach
 ```
 
-This prevents duplicate work, reveals past decisions, and enables continuity across sessions.
+Search uses **semantic mode by default** - finds tasks by meaning, not just keywords. This prevents duplicate work, reveals past decisions, and enables continuity across sessions.
 
 ## Development Commands
 

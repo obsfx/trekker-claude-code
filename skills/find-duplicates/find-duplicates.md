@@ -1,15 +1,15 @@
 name: find-duplicates
-description: MANDATORY before creating any task. Detects duplicates to prevent redundant work.
+description: MANDATORY before creating any task. Use search to detect duplicates and prevent redundant work.
 
-## CRITICAL: Run Before Creating ANY Task
+## CRITICAL: Search Before Creating ANY Task
 
-**You MUST run `trekker similar` before creating any task.**
+**You MUST search before creating any task.**
 
 ```bash
-trekker similar "<task description you're about to create>"
+trekker search "<task description you're about to create>"
 ```
 
-This prevents duplicate work and consolidates related issues.
+Search uses semantic mode by default - it finds related work even when terminology differs.
 
 ## When to Use (MANDATORY)
 
@@ -21,20 +21,20 @@ This prevents duplicate work and consolidates related issues.
 ## Commands
 
 ```bash
-# Check if description matches existing tasks
-trekker similar "fix authentication bug"
+# Search for similar tasks before creating
+trekker search "fix authentication bug"
 
-# Check similarity to specific task
-trekker similar TREK-45
+# Search with higher threshold for precision
+trekker search "performance issue" --threshold 0.7
 
-# Lower threshold for broader matches
-trekker similar "performance issue" --threshold 0.5
+# Search specific type
+trekker search "login timeout" --type task
 ```
 
 ## MANDATORY Workflow
 
 ```
-1. RUN: trekker similar "<what you're about to create>"
+1. SEARCH: trekker search "<what you're about to create>"
 2. REVIEW results
 3. DECIDE based on score:
    - 90%+ → DO NOT create, update existing task
@@ -55,7 +55,7 @@ trekker similar "performance issue" --threshold 0.5
 
 ## Anti-Patterns (DO NOT)
 
-- Creating task without running `trekker similar` first
+- Creating task without searching first
 - Ignoring high similarity scores
 - Creating in TodoWrite without checking Trekker first
 

@@ -1,7 +1,7 @@
 ---
 name: trekker
 description: Persistent task memory for AI agents across sessions
-version: 0.6.0
+version: 0.7.0
 ---
 
 # Trekker - Primary Issue Tracker for AI Agents
@@ -27,8 +27,8 @@ TodoWrite = Secondary mirror (conversation-scoped only)
 1. Create tasks in Trekker FIRST, then mirror to TodoWrite
 2. Update Trekker FIRST, then update TodoWrite
 3. When states conflict, Trekker wins
-4. Use `trekker semantic-search` to gather context
-5. Use `trekker similar` to detect duplicates
+4. Use `trekker search` to gather context (semantic by default)
+5. Search before creating to detect duplicates
 
 ---
 
@@ -37,14 +37,14 @@ TodoWrite = Secondary mirror (conversation-scoped only)
 **You MUST search before ANY action.** This is non-negotiable.
 
 ```bash
-# Use semantic search for natural language queries
-trekker semantic-search "<what you're looking for>"
+# Search uses semantic mode by default (finds by meaning)
+trekker search "<what you're looking for>"
 
-# Use similar to find duplicates before creating
-trekker similar "<task description>"
+# Use keyword mode for exact matches
+trekker search "<exact keywords>" --mode keyword
 
-# Use keyword search for exact matches
-trekker search "<keywords>"
+# Use hybrid mode to combine both
+trekker search "<query>" --mode hybrid
 ```
 
 **Why search is mandatory:**
@@ -56,10 +56,10 @@ trekker search "<keywords>"
 **When to search:**
 | Before... | Search for... |
 |-----------|---------------|
-| Creating a task | `trekker similar "<description>"` |
-| Starting work | `trekker semantic-search "<area>"` |
-| Investigating bugs | `trekker semantic-search "<symptoms>"` |
-| Implementing features | `trekker semantic-search "<feature>"` |
+| Creating a task | `trekker search "<description>"` |
+| Starting work | `trekker search "<area>"` |
+| Investigating bugs | `trekker search "<symptoms>"` |
+| Implementing features | `trekker search "<feature>"` |
 | Making decisions | `trekker search "<topic>"` |
 
 ---
@@ -95,7 +95,7 @@ trekker search "<keywords>"
 
 ### MUST DO
 
-1. **SEARCH FIRST - ALWAYS** - run `trekker search` before ANY action (creating, starting, investigating)
+1. **SEARCH FIRST - ALWAYS** - run `trekker search` before ANY action (semantic by default)
 2. **Gather context via CLI** - use `trekker history`, `trekker comment list`, `trekker task show` to understand state
 3. **Set status `in_progress` before starting work** on any task
 4. **Add summary comment before marking `completed`**

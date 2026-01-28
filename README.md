@@ -56,7 +56,7 @@ trekker init
 
 ## Features
 
-### MCP Tools (24 tools)
+### MCP Tools (27 tools)
 
 The MCP server exposes trekker functionality as tools:
 
@@ -83,6 +83,9 @@ The MCP server exposes trekker functionality as tools:
 | Dependency | `trekker_dep_add` | Add a dependency |
 | Dependency | `trekker_dep_remove` | Remove a dependency |
 | Dependency | `trekker_dep_list` | List dependencies |
+| Search | `trekker_search` | Semantic search (default) |
+| Search | `trekker_keyword_search` | FTS5 keyword search |
+| Search | `trekker_hybrid_search` | Combined search |
 | System | `trekker_init` | Initialize trekker |
 | System | `trekker_quickstart` | Get workflow guide |
 | System | `trekker_wipe` | Wipe database |

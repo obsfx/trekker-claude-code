@@ -21,9 +21,9 @@ User asks questions like:
 | Natural Language | Command |
 |-----------------|---------|
 | "What's in progress?" | `trekker task list --status in_progress` |
-| "Anything stuck?" | `trekker semantic-search "blocked stuck"` |
-| "Urgent bugs" | `trekker semantic-search "bug" --status todo` |
-| "Everything about auth" | `trekker semantic-search "authentication"` |
+| "Anything stuck?" | `trekker search "blocked stuck"` |
+| "Urgent bugs" | `trekker search "bug" --status todo` |
+| "Everything about auth" | `trekker search "authentication"` |
 
 ## Query Patterns
 
@@ -36,9 +36,12 @@ trekker task list --status completed
 # Priority queries
 trekker task list --priority 0,1 --status todo
 
-# Semantic queries
-trekker semantic-search "performance optimization"
-trekker semantic-search "security vulnerability"
+# Semantic queries (default mode)
+trekker search "performance optimization"
+trekker search "security vulnerability"
+
+# Keyword mode for exact matches
+trekker search "specific error message" --mode keyword
 
 # Relationship queries
 trekker dep list TREK-10
