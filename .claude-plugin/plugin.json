@@ -1,7 +1,7 @@
 {
   "name": "trekker",
-  "description": "AI-optimized issue tracker for coding workflows. Manage tasks, epics, and dependencies with simple CLI commands.",
-  "version": "0.4.0",
+  "description": "AI-optimized issue tracker for coding workflows. Search-first workflow with persistent task memory across sessions.",
+  "version": "0.5.0",
   "author": {
     "name": "Omercan Balandi",
     "url": "https://github.com/obsfx"
@@ -13,7 +13,9 @@
     "issue-tracker",
     "task-management",
     "ai-workflow",
-    "agent-memory"
+    "agent-memory",
+    "search-first",
+    "context-recovery"
   ],
   "mcpServers": {
     "trekker": {

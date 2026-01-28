@@ -9,9 +9,24 @@ Find unblocked tasks that are ready to be worked on, with full context from rece
 
 ## Execution
 
-### Step 1: Context Recovery (Required)
+### Step 1: Search for Context (MANDATORY)
 
-Before picking new work, understand what's been happening:
+**Before picking work, search for related past work:**
+
+```bash
+# Search for what the user is working on
+trekker search "<user's current focus area>"
+
+# Search completed tasks for context
+trekker search "<keywords>" --status completed
+```
+
+**Why search first:**
+- Reveals past decisions and solutions you've forgotten
+- May find completed work that informs the approach
+- Prevents re-investigating solved problems
+
+### Step 2: Context Recovery via CLI (MANDATORY)
 
 ```bash
 # Check for any in-progress work first
@@ -19,6 +34,9 @@ trekker --toon task list --status in_progress
 
 # Review recent changes for context
 trekker history --limit 10
+
+# Full audit trail if needed
+trekker history --limit 20
 ```
 
 **Why this matters:**
@@ -26,7 +44,7 @@ trekker history --limit 10
 - Understand recent decisions and completions
 - Recall context from previous sessions
 
-### Step 2: Find Ready Work
+### Step 3: Find Ready Work
 
 ```bash
 # Ready tasks by priority
@@ -36,9 +54,9 @@ trekker list --type task --status todo --sort priority:asc
 trekker --toon task list --status todo
 ```
 
-### Step 3: Get Context Before Starting
+### Step 4: Get Full Context Before Recommending
 
-Before recommending a task, check its history and comments:
+**For each candidate task, gather context via CLI:**
 
 ```bash
 # Task details
@@ -49,6 +67,9 @@ trekker history --entity <task-id>
 
 # Comments for context
 trekker comment list <task-id>
+
+# Dependencies
+trekker dep list <task-id>
 ```
 
 ## Prioritization

@@ -15,22 +15,37 @@ If no task ID provided:
 1. Show current in_progress tasks
 2. Ask which task to complete
 
+## CRITICAL: Summary Comment is MANDATORY
+
+**Never mark a task complete without a detailed summary comment.** Future sessions depend on this context.
+
+**Good summary includes:**
+- What was done (specific changes)
+- Which files were modified
+- Any decisions made
+- Links to related tasks if any
+
 ## Flow
 
-1. Ask for a completion summary (what was done, files changed, etc.)
-2. Add summary comment
-3. Set status to completed
-4. Show next ready task
+1. Review task history for context: `trekker history --entity <task-id>`
+2. Ask for a completion summary (what was done, files changed, decisions made)
+3. Add detailed summary comment
+4. Set status to completed
+5. Search for next ready task
 
 ## Execution
 
 ```bash
-# Add summary comment
-trekker comment add <task-id> -a "claude" -c "Summary: <summary>"
+# Review task history first
+trekker history --entity <task-id>
+
+# Add detailed summary comment (MANDATORY)
+trekker comment add <task-id> -a "claude" -c "Summary: <what was done>. Files: <modified files>. Changes: <specific changes>."
 
 # Mark as completed
 trekker task update <task-id> -s completed
 
-# Show next ready task
+# Search for related work or show next ready task
+trekker search "<related keywords>"
 trekker --toon task list --status todo
 ```

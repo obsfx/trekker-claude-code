@@ -6,6 +6,21 @@ This skill teaches Claude how to use trekker for persistent task tracking across
 
 Trekker is an issue tracker designed for AI coding agents. It stores tasks, epics, and dependencies in a local SQLite database, providing memory that persists beyond conversation context limits.
 
+## CRITICAL: Search-First Workflow
+
+**You don't remember previous sessions.** `trekker search` restores that context.
+
+```bash
+# ALWAYS run before ANY action
+trekker search "<keywords>"
+```
+
+**When to search:**
+- Before creating tasks (check for duplicates/related work)
+- Before starting work (find past decisions and solutions)
+- Before investigating issues (find previous investigations)
+- When context is unclear (STOP → SEARCH → RESUME)
+
 ## When to Use
 
 Use trekker when:
@@ -13,6 +28,8 @@ Use trekker when:
 - Tasks have dependencies on each other
 - You need to preserve context across context resets
 - Collaborating with other agents on the same project
+
+**Important:** Do NOT perform multi-step work without an active trekker issue.
 
 Use TodoWrite when:
 - Simple linear checklists within a single session

@@ -1,7 +1,7 @@
 ---
 name: trekker
 description: Persistent task memory for AI agents across sessions
-version: 0.3.1
+version: 0.4.0
 ---
 
 # Trekker - Issue Tracker for AI Agents
@@ -11,6 +11,32 @@ Trekker provides persistent task memory across sessions. Unlike TodoWrite which 
 ## Quick Reference
 
 **Run `trekker quickstart` for the complete command reference and workflow guide.**
+
+---
+
+## CRITICAL: Search-First Workflow
+
+**You MUST search before ANY action.** This is non-negotiable.
+
+```bash
+# ALWAYS run before starting work
+trekker search "<relevant keywords>"
+```
+
+**Why search is mandatory:**
+- You don't remember previous sessions - search restores that context
+- Past tasks contain solutions, decisions, and file locations you've forgotten
+- Prevents duplicate work and conflicting changes
+- Reveals blockers and dependencies from previous sessions
+
+**When to search:**
+| Before... | Search for... |
+|-----------|---------------|
+| Creating a task | Similar/related tasks |
+| Starting work | Past work on same area |
+| Investigating bugs | Previous bug fixes |
+| Implementing features | Related implementations |
+| Making decisions | Past decisions on same topic |
 
 ---
 
@@ -43,15 +69,16 @@ Trekker provides persistent task memory across sessions. Unlike TodoWrite which 
 
 ### MUST DO
 
-1. **Search before starting new work** - recall past decisions and avoid duplicate effort
-2. **Set status `in_progress` before starting work** on any task
-3. **Add summary comment before marking `completed`**
-4. **Search before creating** - avoid duplicates
-5. **One task `in_progress` at a time** - complete current work first
-6. **Use `--toon` flag** for programmatic output to save tokens
-7. **Reference tasks by ID** (e.g., TREK-1, EPIC-1) in discussions
-8. **Add checkpoint comment before context reset** with: what's done, what's next, files modified
-9. **Write meaningful descriptions** - tasks without context are useless to future sessions
+1. **SEARCH FIRST - ALWAYS** - run `trekker search` before ANY action (creating, starting, investigating)
+2. **Gather context via CLI** - use `trekker history`, `trekker comment list`, `trekker task show` to understand state
+3. **Set status `in_progress` before starting work** on any task
+4. **Add summary comment before marking `completed`**
+5. **Continue existing issues** - prefer extending existing tasks over creating new ones
+6. **One task `in_progress` at a time** - complete current work first
+7. **Use `--toon` flag** for programmatic output to save tokens
+8. **Reference tasks by ID** (e.g., TREK-1, EPIC-1) in discussions
+9. **Add checkpoint comment before context reset** with: what's done, what's next, files modified
+10. **Write meaningful descriptions** - tasks without context are useless to future sessions
 
 ### MUST NOT DO
 
@@ -64,7 +91,13 @@ Trekker provides persistent task memory across sessions. Unlike TodoWrite which 
 
 ### When to Create Issues
 
+**BEFORE CREATING - You MUST:**
+1. Run `trekker search "<keywords>"` to check for existing/related issues
+2. Check if an existing issue can be extended instead
+3. If similar issue exists, add a comment or update it rather than creating a duplicate
+
 **CREATE** when:
+- Search confirms no existing issue covers this work
 - Work spans multiple sessions
 - Task has dependencies or subtasks
 - User explicitly requests tracking
@@ -72,6 +105,7 @@ Trekker provides persistent task memory across sessions. Unlike TodoWrite which 
 - Work needs to be handed off to another session
 
 **DO NOT CREATE** when:
+- Search found an existing issue that covers this work (update it instead)
 - Task is trivial (< 1 minute)
 - User explicitly declines
 - Just exploring or brainstorming
@@ -81,48 +115,57 @@ Trekker provides persistent task memory across sessions. Unlike TodoWrite which 
 
 ## Essential Workflow
 
-### Session Start (Context Recovery)
+### Session Start (Context Recovery) - MANDATORY
 
-**ALWAYS run these commands at session start** to understand what's happening:
+**Run ALL these commands at session start.** Do not proceed without understanding context:
 
 ```bash
-# 1. What's currently being worked on?
+# 1. SEARCH for what you're about to work on
+trekker search "<topic/area of work>"
+
+# 2. What's currently being worked on?
 trekker --toon task list --status in_progress
 
-# 2. What changed recently? (audit trail)
+# 3. What changed recently? (audit trail)
 trekker history --limit 10
 
-# 3. Full picture of active work
+# 4. Full picture of active work
 trekker list --type task --status todo,in_progress --sort priority:asc
 
-# 4. Get context from comments on active tasks
+# 5. Get context from comments on active tasks
 trekker comment list <task-id>
 ```
 
-**Why context recovery matters:**
-- You don't remember previous sessions - history restores that context
-- Audit log shows WHO changed WHAT and WHEN
+**Why context recovery is mandatory:**
+- You don't remember previous sessions - CLI commands restore that context
+- Search reveals past decisions you would otherwise lose
+- History shows WHO changed WHAT and WHEN
 - Prevents duplicate work and conflicting changes
-- Reveals decisions made by other agents or past sessions
+- **If context is unclear: STOP → SEARCH → RESUME**
 
-### Starting New Work (Search First)
+### Before ANY New Work - Search First (MANDATORY)
 
-**ALWAYS search before starting new tasks** to recall past decisions, avoid duplicate work, and build on existing context:
+**STOP. Before doing anything, search for related work:**
 
 ```bash
-# Search for related past work
+# Search for related past work - try multiple queries
 trekker search "authentication"
-trekker search "login bug"
+trekker search "login"
+trekker search "user auth"
 
-# Check completed tasks for context
+# Check completed tasks for solutions
 trekker --toon task list --status completed
+
+# Check archived tasks too
+trekker --toon task list --status archived
 ```
 
-**Why search matters:**
+**Why search is mandatory:**
 - Past tasks contain solutions and decisions you've forgotten
-- Avoid re-investigating already-solved problems
+- Existing issues may already cover what you're about to create
 - Find related code changes and file locations
-- Build on previous work instead of starting from scratch
+- **Prefer continuity over re-implementation**
+- **Prefer extending existing work over starting new threads**
 
 ### Working on Tasks
 

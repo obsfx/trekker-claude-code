@@ -144,11 +144,21 @@ trekker --toon history --limit 3 2>/dev/null || echo "No recent history."
 echo ""
 
 # ============================================================================
-# SECTION 5: Workflow Reminder
+# SECTION 5: Search-First Reminder (CRITICAL)
 # ============================================================================
 echo "---"
 echo ""
-echo "**Workflow**: \`in_progress\` -> work -> summary comment -> \`completed\`"
-echo "**Full guide**: \`trekker quickstart\` | **Search**: \`trekker search \"<query>\"\`"
+echo "## MANDATORY: Search Before Any Action"
 echo ""
-echo "Run \`trekker quickstart\` anytime for complete command reference and examples."
+echo "**Before starting work, creating tasks, or investigating issues:**"
+echo ""
+echo "\`\`\`bash"
+echo "trekker search \"<topic/keywords>\""
+echo "\`\`\`"
+echo ""
+echo "**Why:** You don't remember previous sessions. Search restores context, reveals past decisions, and prevents duplicate work."
+echo ""
+echo "---"
+echo ""
+echo "**Workflow**: \`in_progress\` -> work -> summary comment -> \`completed\`"
+echo "**Full guide**: \`trekker quickstart\`"

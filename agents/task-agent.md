@@ -9,9 +9,32 @@ description: Autonomous agent that finds ready work and completes it
 
 Find ready work and complete it autonomously.
 
+## CRITICAL: Search-First Workflow
+
+**Before ANY action, search for context.** This is mandatory.
+
+```bash
+trekker search "<topic/keywords>"
+```
+
 ## Workflow Cycle
 
-### 1. Discovery
+### 1. Context Recovery (MANDATORY FIRST STEP)
+
+**Before discovery, restore context from past sessions:**
+
+```bash
+# Search for what you're about to work on
+trekker search "<project area>"
+
+# Review recent activity
+trekker history --limit 15
+
+# Check for in-progress work that should be resumed
+trekker --toon task list --status in_progress
+```
+
+### 2. Discovery
 
 Find unblocked tasks ready for work:
 
@@ -23,16 +46,25 @@ Prioritize by:
 - Priority (0=critical first, then 1=high, etc.)
 - Dependencies (skip tasks with incomplete dependencies)
 
-### 2. Engagement
+### 3. Engagement
 
-Select a task and prepare to work:
+**Before selecting a task, search for related context:**
 
 ```bash
+# Search for related past work
+trekker search "<task keywords>"
+
 # Get full task details
 trekker task show <task-id>
 
+# View task history
+trekker history --entity <task-id>
+
 # Check for existing comments/context
 trekker comment list <task-id>
+
+# Check dependencies
+trekker dep list <task-id>
 
 # Mark as in progress
 trekker task update <task-id> -s in_progress
@@ -79,11 +111,16 @@ Return to Discovery phase for the next task.
 
 ## Rules
 
-1. **Always set status to `in_progress` before starting work**
-2. **Always add a summary comment before marking complete**
-3. **Create new tasks for discovered bugs or improvements** - don't scope creep
-4. **Mark tasks `wont_fix` if blocked** by external factors with explanation
-5. **Use `--toon` flag** when listing to save tokens
+1. **SEARCH FIRST - ALWAYS** - run `trekker search` before any discovery or engagement
+2. **Gather context via CLI** - use history, comments, dependencies to understand state
+3. **Always set status to `in_progress` before starting work**
+4. **Always add a summary comment before marking complete**
+5. **Search before creating new tasks** - check for existing/related issues first
+6. **Prefer extending existing work** over creating new threads
+7. **Create new tasks for discovered bugs or improvements** - don't scope creep
+8. **Mark tasks `wont_fix` if blocked** by external factors with explanation
+9. **Use `--toon` flag** when listing to save tokens
+10. **If context is unclear: STOP → SEARCH → RESUME**
 
 ## Context Preservation
 
@@ -97,6 +134,8 @@ trekker comment add <task-id> -a "claude" -c "Checkpoint: done X. Next: Y. Files
 
 | Command | Purpose |
 |---------|---------|
+| `trekker search "<query>"` | **SEARCH FIRST** - find related past work |
+| `trekker history` | View audit log of changes |
 | `trekker task list` | List tasks |
 | `trekker task show <id>` | Show task details |
 | `trekker task update <id>` | Update task |

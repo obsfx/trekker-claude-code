@@ -14,12 +14,21 @@ List and explore tasks with powerful filtering and sorting for situational aware
 
 ## Common Patterns
 
-### Session Start (Get the Full Picture)
+### Session Start (MANDATORY Context Recovery)
+
+**Always gather context via CLI before working:**
+
 ```bash
-# All active work, prioritized
+# 1. SEARCH for what you're working on
+trekker search "<topic/area>"
+
+# 2. Review recent activity
+trekker history --limit 10
+
+# 3. All active work, prioritized
 trekker list --status todo,in_progress --sort priority:asc
 
-# What's currently being worked on?
+# 4. What's currently being worked on?
 trekker --toon task list --status in_progress
 ```
 
