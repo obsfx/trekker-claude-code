@@ -3,8 +3,7 @@ node_modules/
 .DS_Store
 .trekker/
 
-# Ignore dist except mcp-server (bundled with plugin)
-mcp-server/dist/
+# mcp-server/dist/ is tracked - required for plugin installation
 
 docs/
 .idea/
