@@ -12,7 +12,7 @@ import { registerSearchTools } from './tools/search.js';
 
 const server = new McpServer({
   name: 'trekker-mcp',
-  version: '0.1.0',
+  version: '0.6.0',
 });
 
 registerTaskTools(server);
