@@ -1,6 +1,6 @@
 {
   "name": "@obsfx/trekker-mcp",
-  "version": "1.7.2",
+  "version": "1.7.3",
   "description": "MCP server for trekker issue tracker",
   "type": "module",
   "main": "dist/index.js",
@@ -15,7 +15,10 @@
     "build:tsc": "tsc",
     "dev": "tsc --watch",
     "start": "node dist/index.js",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm run build",
+    "version:patch": "npm version patch --no-git-tag-version",
+    "version:minor": "npm version minor --no-git-tag-version",
+    "version:major": "npm version major --no-git-tag-version"
   },
   "keywords": [
     "mcp",
