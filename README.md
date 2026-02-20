@@ -22,10 +22,10 @@ npm install -g @obsfx/trekker
 
 ```bash
 # Add the trekker marketplace
-claude /plugin marketplace add obsfx/trekker-claude-code
+claude plugin marketplace add obsfx/trekker-claude-code
 
 # Install the plugin
-claude /plugin install trekker
+claude plugin install trekker
 ```
 
 Or in Claude Code interactive mode:
