@@ -34,9 +34,6 @@ trekker --toon task list --status in_progress
 
 # Review recent changes for context
 trekker history --limit 10
-
-# Full audit trail if needed
-trekker history --limit 20
 ```
 
 **Why this matters:**
@@ -47,12 +44,16 @@ trekker history --limit 20
 ### Step 3: Find Ready Work
 
 ```bash
-# Ready tasks by priority
-trekker list --type task --status todo --sort priority:asc
-
-# Or just tasks
-trekker --toon task list --status todo
+# Show all unblocked todo tasks with their downstream dependents
+trekker --toon ready
 ```
+
+The `ready` command returns tasks that:
+- Have status `todo`
+- Are top-level tasks (not subtasks)
+- Have no incomplete dependencies blocking them
+
+For each ready task, it also shows **downstream dependents** — tasks that are waiting on it to be completed.
 
 ### Step 4: Get Full Context Before Recommending
 
@@ -74,7 +75,7 @@ trekker dep list <task-id>
 
 ## Prioritization
 
-Present tasks sorted by priority (0=critical first).
+Present tasks sorted by priority (0=critical first). The `ready` command already returns tasks in priority order.
 
 ## After Listing
 

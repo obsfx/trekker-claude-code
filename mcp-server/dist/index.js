@@ -21196,6 +21196,24 @@ function registerSearchTools(server2) {
   );
 }
 
+// src/tools/ready.ts
+function registerReadyTools(server2) {
+  server2.registerTool(
+    "trekker_task_ready",
+    {
+      title: "Ready Tasks",
+      description: "Show tasks that are ready to work on (unblocked, todo) with their downstream dependents",
+      inputSchema: {}
+    },
+    async () => {
+      const result = await runTrekker(["ready"]);
+      return {
+        content: [{ type: "text", text: JSON.stringify(result, null, 2) }]
+      };
+    }
+  );
+}
+
 // src/index.ts
 var server = new McpServer({
   name: "trekker-mcp",
@@ -21208,6 +21226,7 @@ registerCommentTools(server);
 registerDependencyTools(server);
 registerSystemTools(server);
 registerSearchTools(server);
+registerReadyTools(server);
 async function main() {
   const transport = new StdioServerTransport();
   await server.connect(transport);

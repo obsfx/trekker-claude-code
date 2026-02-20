@@ -43,6 +43,26 @@ export interface Dependency {
   createdAt: string;
 }
 
+export interface ReadyTaskDependent {
+  id: string;
+  title: string;
+  status: string;
+  priority: number;
+}
+
+export interface ReadyTask {
+  id: string;
+  title: string;
+  description: string | null;
+  priority: number;
+  status: string;
+  epicId: string | null;
+  tags: string | null;
+  createdAt: string;
+  updatedAt: string;
+  dependents: ReadyTaskDependent[];
+}
+
 export interface TrekkerResult<T> {
   success: boolean;
   data?: T;

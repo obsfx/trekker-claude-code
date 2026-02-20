@@ -31,6 +31,9 @@ EPIC_COUNT=${EPIC_COUNT:-0}
 echo "**State**: $IN_PROG in-progress | $TODO todo | $EPIC_COUNT epics"
 echo ""
 
+# Trekker priority over internal tools
+print_trekker_priority
+
 # Show in-progress work with context
 print_in_progress_section() {
     echo "## Resume In-Progress Work"

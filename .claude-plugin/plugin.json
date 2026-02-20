@@ -20,7 +20,9 @@
   "mcpServers": {
     "trekker": {
       "command": "node",
-      "args": ["${CLAUDE_PLUGIN_ROOT}/mcp-server/dist/index.js"]
+      "args": [
+        "${CLAUDE_PLUGIN_ROOT}/mcp-server/dist/index.js"
+      ]
     }
   },
   "hooks": "./hooks/hooks.json"
