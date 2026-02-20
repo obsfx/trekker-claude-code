@@ -1,6 +1,6 @@
 {
   "name": "@obsfx/trekker-mcp",
-  "version": "1.7.4",
+  "version": "1.7.6",
   "description": "MCP server for trekker issue tracker",
   "type": "module",
   "main": "dist/index.js",
