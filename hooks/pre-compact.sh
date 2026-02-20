@@ -1,127 +1,56 @@
 #!/bin/bash
-# Pre-compact hook: Gather and preserve Trekker state before context compaction
+# Pre-compact hook: Preserve trekker state before context compaction
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/lib/utils.sh"
 
-# Early return if trekker not initialized
 if [ ! -d ".trekker" ]; then
-    echo "# Trekker Context (not initialized)"
-    echo ""
-    echo "Trekker is not initialized in this directory."
-    echo "To initialize: \`trekker init\`"
+    echo "Trekker: not initialized."
     exit 0
 fi
 
-echo "# Trekker State Snapshot"
-echo ""
-echo "**IMPORTANT**: Save your progress before context compaction!"
-echo ""
-
-# Fetch all state upfront
-IN_PROG_OUTPUT=$(trekker --toon task list --status in_progress 2>/dev/null)
+# Fetch state
 TODO_OUTPUT=$(trekker --toon task list --status todo 2>/dev/null)
+IN_PROG_OUTPUT=$(trekker --toon task list --status in_progress 2>/dev/null)
 COMPLETED_OUTPUT=$(trekker --toon task list --status completed 2>/dev/null)
 EPIC_OUTPUT=$(trekker --toon epic list 2>/dev/null)
 
-IN_PROG=$(echo "$IN_PROG_OUTPUT" | get_toon_count)
-TODO=$(echo "$TODO_OUTPUT" | get_toon_count)
-COMPLETED=$(echo "$COMPLETED_OUTPUT" | get_toon_count)
-EPIC_COUNT=$(echo "$EPIC_OUTPUT" | get_toon_count)
+TODO=$(echo "$TODO_OUTPUT" | get_toon_count); TODO=${TODO:-0}
+IN_PROG=$(echo "$IN_PROG_OUTPUT" | get_toon_count); IN_PROG=${IN_PROG:-0}
+COMPLETED=$(echo "$COMPLETED_OUTPUT" | get_toon_count); COMPLETED=${COMPLETED:-0}
+EPIC_COUNT=$(echo "$EPIC_OUTPUT" | get_toon_count); EPIC_COUNT=${EPIC_COUNT:-0}
 
-IN_PROG=${IN_PROG:-0}
-TODO=${TODO:-0}
-COMPLETED=${COMPLETED:-0}
-EPIC_COUNT=${EPIC_COUNT:-0}
+echo "# Trekker Pre-Compact State"
+echo ""
+echo "State: $IN_PROG in-progress | $TODO todo | $COMPLETED completed | $EPIC_COUNT epics"
+echo ""
 
-# Section: Active work
-print_active_work_section() {
-    echo "## Active Work (In-Progress)"
+# Active work details (critical to preserve across compaction)
+if [ "$IN_PROG" -gt 0 ]; then
+    echo "## Active Work"
     echo ""
-
-    if [ "$IN_PROG" -eq 0 ]; then
-        echo "No tasks currently in progress."
-        echo ""
-        return
-    fi
-
-    trekker --toon task list --status in_progress 2>/dev/null
-    echo ""
-
-    echo "### Context for Active Tasks"
-    echo ""
-
     for task_id in $(echo "$IN_PROG_OUTPUT" | get_toon_task_ids); do
         print_task_context "$task_id"
     done
+    echo ""
+fi
 
-    echo "### Required: Add Checkpoint Comment"
+# Ready tasks
+if [ "$TODO" -gt 0 ]; then
+    echo "## Ready Tasks"
     echo ""
-    echo "Before compaction, add a checkpoint to each in-progress task:"
+    trekker --toon ready 2>/dev/null || trekker --toon task list --status todo 2>/dev/null | head -8
     echo ""
+fi
 
-    for task_id in $(echo "$IN_PROG_OUTPUT" | get_toon_task_ids); do
-        print_checkpoint_template "$task_id"
-    done
-}
-
-# Section: Ready work
-print_ready_work_section() {
-    echo "## Ready Work (Unblocked Tasks)"
-    echo ""
-
-    if [ "$TODO" -eq 0 ]; then
-        echo "No tasks in todo status."
-        echo ""
-        return
-    fi
-
-    trekker --toon ready 2>/dev/null || trekker --toon task list --status todo 2>/dev/null | head -10
-    echo ""
-}
-
-# Section: State summary table
-print_state_summary() {
-    echo "## State Summary"
-    echo ""
-    echo "| Status | Count |"
-    echo "|--------|-------|"
-    echo "| In Progress | $IN_PROG |"
-    echo "| Todo | $TODO |"
-    echo "| Completed | $COMPLETED |"
-    echo "| Epics | $EPIC_COUNT |"
-    echo ""
-}
-
-# Section: Recovery instructions
-print_recovery_instructions() {
-    echo "---"
-    echo ""
-    echo "## After Compaction - MANDATORY Recovery Steps"
-    echo ""
-    echo "**You will NOT remember this session. Use CLI to restore context:**"
-    echo ""
-    echo "1. **SEARCH FIRST**: \`trekker search \"<what you're working on>\"\`"
-    echo "2. Check in-progress work: \`trekker --toon task list --status in_progress\`"
-    echo "3. Review history: \`trekker history --limit 15\`"
-    echo "4. Read task comments: \`trekker comment list <task-id>\`"
-    echo "5. **Find ready work**: \`trekker ready\` (shows unblocked tasks and what they unblock)"
-    echo "6. Resume work or pick next task from ready list"
-    echo ""
-    echo "**Rule**: If context is unclear → STOP → SEARCH → RESUME"
-    echo ""
-    echo "**Workflow**: Set \`in_progress\` when starting, add summary comment, then \`completed\`."
-    echo "**Full guide**: Run \`trekker quickstart\` for complete command reference."
-}
-
-# Main flow
-print_active_work_section
-print_ready_work_section
-
-echo "## Recent Activity"
+# Recent activity
+echo "## Recent (last 3)"
 echo ""
-trekker --toon history --limit 5 2>/dev/null || echo "No recent history available."
+trekker --toon history --limit 3 2>/dev/null || echo "No recent history."
 echo ""
 
-print_state_summary
-print_recovery_instructions
+# Recovery instructions (compact)
+echo "---"
+echo ""
+echo "POST-COMPACT: \`trekker search \"<keyword>\"\` -> \`trekker ready\` -> \`trekker comment list <id>\` -> resume"
+echo "Workflow: in_progress->work->comment->completed. Guide: \`trekker quickstart\`"
