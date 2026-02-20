@@ -1,7 +1,7 @@
 {
   "name": "trekker",
   "description": "AI-optimized issue tracker for coding workflows. Search-first workflow with persistent task memory across sessions.",
-  "version": "1.8.3",
+  "version": "1.8.4",
   "author": {
     "name": "Omercan Balandi",
     "url": "https://github.com/obsfx"
@@ -24,6 +24,5 @@
         "${CLAUDE_PLUGIN_ROOT}/mcp-server/dist/index.js"
       ]
     }
-  },
-  "hooks": "./hooks/hooks.json"
+  }
 }
