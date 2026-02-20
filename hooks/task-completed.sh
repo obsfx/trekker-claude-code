@@ -1,6 +1,6 @@
 #!/bin/bash
-# TaskCompleted hook: Sync task completion to Trekker
-# Fires when Claude marks an internal task as completed.
+# Stop/SubagentStop hook: Sync task completion to Trekker
+# Fires when Claude (main agent or subagent) finishes its work.
 # Best-effort: silently exits if trekker is not initialized or no match found.
 
 set -euo pipefail
@@ -46,7 +46,7 @@ for keyword in $keywords; do
   task_id=$(echo "$results" | grep -oE 'TREK-[0-9]+' | head -1 || true)
 
   if [ -n "$task_id" ]; then
-    trekker comment add "$task_id" -a "claude" -c "Auto-synced: completed via TaskCompleted hook. Claude task: $task_subject" 2>/dev/null || true
+    trekker comment add "$task_id" -a "claude" -c "Auto-synced: completed via Stop hook. Claude task: $task_subject" 2>/dev/null || true
     trekker task update "$task_id" -s completed 2>/dev/null || true
     echo "Trekker sync: marked $task_id as completed"
     exit 0
