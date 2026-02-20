@@ -67,7 +67,7 @@ print_active_work_section() {
 
 # Section: Ready work
 print_ready_work_section() {
-    echo "## Ready Work (Top 5 Todo)"
+    echo "## Ready Work (Unblocked Tasks)"
     echo ""
 
     if [ "$TODO" -eq 0 ]; then
@@ -76,7 +76,7 @@ print_ready_work_section() {
         return
     fi
 
-    trekker --toon task list --status todo 2>/dev/null | head -10
+    trekker --toon ready 2>/dev/null || trekker --toon task list --status todo 2>/dev/null | head -10
     echo ""
 }
 
@@ -105,7 +105,8 @@ print_recovery_instructions() {
     echo "2. Check in-progress work: \`trekker --toon task list --status in_progress\`"
     echo "3. Review history: \`trekker history --limit 15\`"
     echo "4. Read task comments: \`trekker comment list <task-id>\`"
-    echo "5. Resume work or pick next task from backlog"
+    echo "5. **Find ready work**: \`trekker ready\` (shows unblocked tasks and what they unblock)"
+    echo "6. Resume work or pick next task from ready list"
     echo ""
     echo "**Rule**: If context is unclear → STOP → SEARCH → RESUME"
     echo ""

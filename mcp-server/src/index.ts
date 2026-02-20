@@ -1,4 +1,7 @@
 #!/usr/bin/env node
+import { readFileSync } from 'node:fs';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 
@@ -11,9 +14,12 @@ import { registerSystemTools } from './tools/system.js';
 import { registerSearchTools } from './tools/search.js';
 import { registerReadyTools } from './tools/ready.js';
 
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const pkg = JSON.parse(readFileSync(join(__dirname, '../package.json'), 'utf8'));
+
 const server = new McpServer({
   name: 'trekker-mcp',
-  version: '0.6.0',
+  version: pkg.version,
 });
 
 registerTaskTools(server);

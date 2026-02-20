@@ -98,8 +98,8 @@ print_workflow_footer() {
     echo ""
     echo "---"
     echo ""
-    echo "**Workflow**: \`in_progress\` -> work -> summary comment -> \`completed\`"
-    echo "**Full guide**: \`trekker quickstart\` | **Search**: \`trekker search \"<query>\"\`"
+    echo "**Workflow**: \`in_progress\` -> work -> summary comment -> \`completed\` -> \`trekker ready\`"
+    echo "**Full guide**: \`trekker quickstart\` | **Search**: \`trekker search \"<query>\"\` | **Next work**: \`trekker ready\`"
 }
 
 # Print Trekker priority reminder

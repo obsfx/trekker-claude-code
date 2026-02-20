@@ -49,6 +49,10 @@ for keyword in $keywords; do
     trekker comment add "$task_id" -a "claude" -c "Auto-synced: completed via Stop hook. Claude task: $task_subject" 2>/dev/null || true
     trekker task update "$task_id" -s completed 2>/dev/null || true
     echo "Trekker sync: marked $task_id as completed"
+    echo ""
+    echo "## Next Ready Tasks"
+    echo ""
+    trekker --toon ready 2>/dev/null || echo "No ready tasks found."
     exit 0
   fi
 done

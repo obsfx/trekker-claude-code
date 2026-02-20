@@ -6789,6 +6789,11 @@ var require_dist = __commonJS({
   }
 });
 
+// src/index.ts
+import { readFileSync } from "node:fs";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
+
 // node_modules/.pnpm/zod@3.25.76/node_modules/zod/v3/helpers/util.js
 var util;
 (function(util2) {
@@ -21215,9 +21220,11 @@ function registerReadyTools(server2) {
 }
 
 // src/index.ts
+var __dirname = dirname(fileURLToPath(import.meta.url));
+var pkg = JSON.parse(readFileSync(join(__dirname, "../package.json"), "utf8"));
 var server = new McpServer({
   name: "trekker-mcp",
-  version: "0.6.0"
+  version: pkg.version
 });
 registerTaskTools(server);
 registerEpicTools(server);

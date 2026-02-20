@@ -1,7 +1,6 @@
 ---
 name: trekker
 description: Persistent task memory for AI agents across sessions
-version: 1.7.0
 ---
 
 # Trekker - Primary Issue Tracker for AI Agents
@@ -164,8 +163,8 @@ trekker --toon task list --status in_progress
 # 3. What changed recently? (audit trail)
 trekker history --limit 10
 
-# 4. Full picture of active work
-trekker list --type task --status todo,in_progress --sort priority:asc
+# 4. Find unblocked tasks ready to work on
+trekker ready
 
 # 5. Get context from comments on active tasks
 trekker comment list <task-id>
@@ -213,6 +212,9 @@ trekker comment add <task-id> -a "claude" -c "Progress: ..."
 # Complete with summary
 trekker comment add <task-id> -a "claude" -c "Summary: ..."
 trekker task update <task-id> -s completed
+
+# ALWAYS show next ready tasks after completing
+trekker ready
 ```
 
 ### Before Context Reset
@@ -252,6 +254,7 @@ trekker epic complete <epic-id>
 | `trekker task update <id> -s <status>` | Update status |
 | `trekker comment add <id> -a "claude" -c "..."` | Add comment |
 | `trekker dep add <id> <depends-on>` | Add dependency |
+| `trekker ready` | Show unblocked tasks ready to work on |
 | `trekker search "<query>"` | Full-text search |
 | `trekker history [--entity <id>]` | View audit log of changes |
 | `trekker list [--type X] [--sort Y]` | Unified view with filters |

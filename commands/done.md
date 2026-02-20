@@ -31,7 +31,7 @@ If no task ID provided:
 2. Ask for a completion summary (what was done, files changed, decisions made)
 3. Add detailed summary comment
 4. Set status to completed
-5. Search for next ready task
+5. Show ready tasks to find next work
 
 ## Execution
 
@@ -45,7 +45,6 @@ trekker comment add <task-id> -a "claude" -c "Summary: <what was done>. Files: <
 # Mark as completed
 trekker task update <task-id> -s completed
 
-# Search for related work or show next ready task
-trekker search "<related keywords>"
-trekker --toon task list --status todo
+# ALWAYS show ready tasks after completing work
+trekker --toon ready
 ```

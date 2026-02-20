@@ -74,15 +74,15 @@ print_no_work_section() {
         return
     fi
 
-    echo "### Ready Tasks (sorted by priority)"
+    echo "### Ready Tasks (unblocked, sorted by priority)"
     echo ""
-    trekker --toon task list --status todo 2>/dev/null | head -12
+    trekker --toon ready 2>/dev/null || trekker --toon task list --status todo 2>/dev/null | head -12
     echo ""
 
     echo "### To Start Working"
     echo ""
-    echo "1. Pick a task: \`trekker task show <id>\`"
-    echo "2. Check dependencies: \`trekker dep list <id>\`"
+    echo "1. Pick a task from ready list above"
+    echo "2. Review context: \`trekker task show <id>\`"
     echo "3. Start work: \`trekker task update <id> -s in_progress\`"
     echo ""
 }
