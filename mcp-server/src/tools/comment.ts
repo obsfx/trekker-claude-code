@@ -27,13 +27,19 @@ export function registerCommentTools(server: McpServer): void {
     'trekker_comment_list',
     {
       title: 'List Comments',
-      description: 'List comments on a task',
+      description: 'List comments on a task. Returns paginated results (default: 50 per page, newest first). Use page parameter to get older results.',
       inputSchema: {
         taskId: z.string().describe('Task ID (e.g., TREK-1)'),
+        limit: z.number().optional().describe('Results per page (default: 50)'),
+        page: z.number().optional().describe('Page number (default: 1)'),
       },
     },
-    async ({ taskId }) => {
-      const result = await runTrekker<Comment[]>(['comment', 'list', taskId]);
+    async ({ taskId, limit, page }) => {
+      const args = ['comment', 'list', taskId];
+      if (limit !== undefined) args.push('--limit', String(limit));
+      if (page !== undefined) args.push('--page', String(page));
+
+      const result = await runTrekker(args);
       return {
         content: [{ type: 'text', text: JSON.stringify(result, null, 2) }],
       };

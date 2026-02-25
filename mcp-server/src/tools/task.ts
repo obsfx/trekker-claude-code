@@ -35,18 +35,22 @@ export function registerTaskTools(server: McpServer): void {
     'trekker_task_list',
     {
       title: 'List Tasks',
-      description: 'List tasks with optional filters',
+      description: 'List tasks with optional filters. Returns paginated results (default: 50 per page, newest first). Use page parameter to get older results.',
       inputSchema: {
         status: z.enum(['todo', 'in_progress', 'completed', 'wont_fix', 'archived']).optional().describe('Filter by status'),
         epicId: z.string().optional().describe('Filter by epic ID'),
+        limit: z.number().optional().describe('Results per page (default: 50)'),
+        page: z.number().optional().describe('Page number (default: 1)'),
       },
     },
-    async ({ status, epicId }) => {
+    async ({ status, epicId, limit, page }) => {
       const args = ['task', 'list'];
       if (status) args.push('--status', status);
       if (epicId) args.push('--epic', epicId);
+      if (limit !== undefined) args.push('--limit', String(limit));
+      if (page !== undefined) args.push('--page', String(page));
 
-      const result = await runTrekker<Task[]>(args);
+      const result = await runTrekker(args);
       return {
         content: [{ type: 'text', text: JSON.stringify(result, null, 2) }],
       };

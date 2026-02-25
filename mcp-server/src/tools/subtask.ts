@@ -32,13 +32,19 @@ export function registerSubtaskTools(server: McpServer): void {
     'trekker_subtask_list',
     {
       title: 'List Subtasks',
-      description: 'List subtasks of a parent task',
+      description: 'List subtasks of a parent task. Returns paginated results (default: 50 per page, newest first). Use page parameter to get older results.',
       inputSchema: {
         parentTaskId: z.string().describe('Parent task ID (e.g., TREK-1)'),
+        limit: z.number().optional().describe('Results per page (default: 50)'),
+        page: z.number().optional().describe('Page number (default: 1)'),
       },
     },
-    async ({ parentTaskId }) => {
-      const result = await runTrekker<Task[]>(['subtask', 'list', parentTaskId]);
+    async ({ parentTaskId, limit, page }) => {
+      const args = ['subtask', 'list', parentTaskId];
+      if (limit !== undefined) args.push('--limit', String(limit));
+      if (page !== undefined) args.push('--page', String(page));
+
+      const result = await runTrekker(args);
       return {
         content: [{ type: 'text', text: JSON.stringify(result, null, 2) }],
       };

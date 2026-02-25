@@ -33,16 +33,20 @@ export function registerEpicTools(server: McpServer): void {
     'trekker_epic_list',
     {
       title: 'List Epics',
-      description: 'List epics with optional filters',
+      description: 'List epics with optional filters. Returns paginated results (default: 50 per page, newest first). Use page parameter to get older results.',
       inputSchema: {
         status: z.enum(['todo', 'in_progress', 'completed', 'archived']).optional().describe('Filter by status'),
+        limit: z.number().optional().describe('Results per page (default: 50)'),
+        page: z.number().optional().describe('Page number (default: 1)'),
       },
     },
-    async ({ status }) => {
+    async ({ status, limit, page }) => {
       const args = ['epic', 'list'];
       if (status) args.push('--status', status);
+      if (limit !== undefined) args.push('--limit', String(limit));
+      if (page !== undefined) args.push('--page', String(page));
 
-      const result = await runTrekker<Epic[]>(args);
+      const result = await runTrekker(args);
       return {
         content: [{ type: 'text', text: JSON.stringify(result, null, 2) }],
       };

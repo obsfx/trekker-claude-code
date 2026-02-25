@@ -20724,16 +20724,20 @@ function registerTaskTools(server2) {
     "trekker_task_list",
     {
       title: "List Tasks",
-      description: "List tasks with optional filters",
+      description: "List tasks with optional filters. Returns paginated results (default: 50 per page, newest first). Use page parameter to get older results.",
       inputSchema: {
         status: enumType(["todo", "in_progress", "completed", "wont_fix", "archived"]).optional().describe("Filter by status"),
-        epicId: stringType().optional().describe("Filter by epic ID")
+        epicId: stringType().optional().describe("Filter by epic ID"),
+        limit: numberType().optional().describe("Results per page (default: 50)"),
+        page: numberType().optional().describe("Page number (default: 1)")
       }
     },
-    async ({ status, epicId }) => {
+    async ({ status, epicId, limit, page }) => {
       const args = ["task", "list"];
       if (status) args.push("--status", status);
       if (epicId) args.push("--epic", epicId);
+      if (limit !== void 0) args.push("--limit", String(limit));
+      if (page !== void 0) args.push("--page", String(page));
       const result = await runTrekker(args);
       return {
         content: [{ type: "text", text: JSON.stringify(result, null, 2) }]
@@ -20834,14 +20838,18 @@ function registerEpicTools(server2) {
     "trekker_epic_list",
     {
       title: "List Epics",
-      description: "List epics with optional filters",
+      description: "List epics with optional filters. Returns paginated results (default: 50 per page, newest first). Use page parameter to get older results.",
       inputSchema: {
-        status: enumType(["todo", "in_progress", "completed", "archived"]).optional().describe("Filter by status")
+        status: enumType(["todo", "in_progress", "completed", "archived"]).optional().describe("Filter by status"),
+        limit: numberType().optional().describe("Results per page (default: 50)"),
+        page: numberType().optional().describe("Page number (default: 1)")
       }
     },
-    async ({ status }) => {
+    async ({ status, limit, page }) => {
       const args = ["epic", "list"];
       if (status) args.push("--status", status);
+      if (limit !== void 0) args.push("--limit", String(limit));
+      if (page !== void 0) args.push("--page", String(page));
       const result = await runTrekker(args);
       return {
         content: [{ type: "text", text: JSON.stringify(result, null, 2) }]
@@ -20935,13 +20943,18 @@ function registerSubtaskTools(server2) {
     "trekker_subtask_list",
     {
       title: "List Subtasks",
-      description: "List subtasks of a parent task",
+      description: "List subtasks of a parent task. Returns paginated results (default: 50 per page, newest first). Use page parameter to get older results.",
       inputSchema: {
-        parentTaskId: stringType().describe("Parent task ID (e.g., TREK-1)")
+        parentTaskId: stringType().describe("Parent task ID (e.g., TREK-1)"),
+        limit: numberType().optional().describe("Results per page (default: 50)"),
+        page: numberType().optional().describe("Page number (default: 1)")
       }
     },
-    async ({ parentTaskId }) => {
-      const result = await runTrekker(["subtask", "list", parentTaskId]);
+    async ({ parentTaskId, limit, page }) => {
+      const args = ["subtask", "list", parentTaskId];
+      if (limit !== void 0) args.push("--limit", String(limit));
+      if (page !== void 0) args.push("--page", String(page));
+      const result = await runTrekker(args);
       return {
         content: [{ type: "text", text: JSON.stringify(result, null, 2) }]
       };
@@ -21014,13 +21027,18 @@ function registerCommentTools(server2) {
     "trekker_comment_list",
     {
       title: "List Comments",
-      description: "List comments on a task",
+      description: "List comments on a task. Returns paginated results (default: 50 per page, newest first). Use page parameter to get older results.",
       inputSchema: {
-        taskId: stringType().describe("Task ID (e.g., TREK-1)")
+        taskId: stringType().describe("Task ID (e.g., TREK-1)"),
+        limit: numberType().optional().describe("Results per page (default: 50)"),
+        page: numberType().optional().describe("Page number (default: 1)")
       }
     },
-    async ({ taskId }) => {
-      const result = await runTrekker(["comment", "list", taskId]);
+    async ({ taskId, limit, page }) => {
+      const args = ["comment", "list", taskId];
+      if (limit !== void 0) args.push("--limit", String(limit));
+      if (page !== void 0) args.push("--page", String(page));
+      const result = await runTrekker(args);
       return {
         content: [{ type: "text", text: JSON.stringify(result, null, 2) }]
       };
@@ -21207,11 +21225,17 @@ function registerReadyTools(server2) {
     "trekker_task_ready",
     {
       title: "Ready Tasks",
-      description: "Show tasks that are ready to work on (unblocked, todo) with their downstream dependents",
-      inputSchema: {}
+      description: "Show tasks that are ready to work on (unblocked, todo) with their downstream dependents. Returns paginated results (default: 50 per page). Use page parameter to get older results.",
+      inputSchema: {
+        limit: numberType().optional().describe("Results per page (default: 50)"),
+        page: numberType().optional().describe("Page number (default: 1)")
+      }
     },
-    async () => {
-      const result = await runTrekker(["ready"]);
+    async ({ limit, page }) => {
+      const args = ["ready"];
+      if (limit !== void 0) args.push("--limit", String(limit));
+      if (page !== void 0) args.push("--page", String(page));
+      const result = await runTrekker(args);
       return {
         content: [{ type: "text", text: JSON.stringify(result, null, 2) }]
       };

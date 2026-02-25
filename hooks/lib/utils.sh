@@ -1,14 +1,14 @@
 #!/bin/bash
 # Shared utilities for trekker hooks
 
-# Extract count from toon format (first line: [count])
+# Extract count from toon format (paginated: "total: N" on first line)
 get_toon_count() {
-    head -1 | grep -o '^\[[0-9]*\]' | tr -d '[]'
+    grep -m1 '^total:' | sed 's/^total:[[:space:]]*//'
 }
 
-# Extract task IDs from toon list (CSV rows after header)
+# Extract task IDs from toon paginated output (items section)
 get_toon_task_ids() {
-    tail -n +2 | cut -d',' -f1 | sed 's/^[[:space:]]*//' | grep -E '^TREK-[0-9]+$'
+    grep -oE 'TREK-[0-9]+' | head -50
 }
 
 # Compact task context: id, title, desc, last 3 comment lines, deps
@@ -21,10 +21,20 @@ print_task_context() {
     echo "- $id: $title"
     [ -n "$desc" ] && [ "$desc" != "null" ] && echo "  desc: $desc"
 
-    local comments=$(trekker --toon comment list "$id" 2>/dev/null | tail -3)
-    [ -n "$comments" ] && echo "  comments:" && echo "$comments" | sed 's/^/    /'
+    # Comments: paginated TOON has "items[N]{...}:" header then data rows with leading spaces
+    local comment_output=$(trekker --toon comment list "$id" 2>/dev/null)
+    local cc=$(echo "$comment_output" | get_toon_count); cc=${cc:-0}
+    if [ "$cc" -gt 0 ]; then
+        echo "  comments:"
+        echo "$comment_output" | grep -E '^  ' | tail -3 | sed 's/^/    /'
+    fi
 
+    # Deps: TOON has "dependsOn[N]" and "blocks[N]" sections
     local deps=$(trekker --toon dep list "$id" 2>/dev/null)
-    local dc=$(echo "$deps" | grep -c '^  - ' 2>/dev/null || echo "0")
-    [ "$dc" -gt 0 ] && echo "  deps:" && echo "$deps" | sed 's/^/    /'
+    local dep_count=$(echo "$deps" | grep -oE 'dependsOn\[([0-9]+)\]' | grep -oE '[0-9]+')
+    dep_count=${dep_count:-0}
+    if [ "$dep_count" -gt 0 ]; then
+        echo "  deps:"
+        echo "$deps" | grep -E '^  ' | sed 's/^/    /'
+    fi
 }
