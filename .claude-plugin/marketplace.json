@@ -15,7 +15,7 @@
         "repo": "obsfx/trekker-claude-code"
       },
       "description": "AI-optimized issue tracker for coding workflows. Manage tasks, epics, and dependencies with simple CLI commands.",
-      "version": "1.8.7",
+      "version": "1.10.2",
       "author": {
         "name": "Omercan Balandi"
       }
