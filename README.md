@@ -56,28 +56,29 @@ trekker init
 
 ## Features
 
-### MCP Tools (25 tools)
+### MCP Tools (26 tools)
 
 The MCP server exposes trekker functionality as tools:
 
 | Category | Tool | Description |
 |----------|------|-------------|
 | Task | `trekker_task_create` | Create a new task |
-| Task | `trekker_task_list` | List tasks with filters |
+| Task | `trekker_task_list` | List tasks with filters and pagination |
 | Task | `trekker_task_show` | Show task details |
 | Task | `trekker_task_update` | Update task fields |
 | Task | `trekker_task_delete` | Delete a task |
+| Task | `trekker_task_ready` | Show unblocked tasks ready to work on |
 | Epic | `trekker_epic_create` | Create an epic |
-| Epic | `trekker_epic_list` | List epics |
+| Epic | `trekker_epic_list` | List epics with pagination |
 | Epic | `trekker_epic_show` | Show epic details |
 | Epic | `trekker_epic_update` | Update an epic |
 | Epic | `trekker_epic_delete` | Delete an epic |
 | Subtask | `trekker_subtask_create` | Create a subtask |
-| Subtask | `trekker_subtask_list` | List subtasks |
+| Subtask | `trekker_subtask_list` | List subtasks with pagination |
 | Subtask | `trekker_subtask_update` | Update a subtask |
 | Subtask | `trekker_subtask_delete` | Delete a subtask |
 | Comment | `trekker_comment_add` | Add a comment |
-| Comment | `trekker_comment_list` | List comments |
+| Comment | `trekker_comment_list` | List comments with pagination |
 | Comment | `trekker_comment_update` | Update a comment |
 | Comment | `trekker_comment_delete` | Delete a comment |
 | Dependency | `trekker_dep_add` | Add a dependency |
@@ -119,9 +120,21 @@ The task agent (`/trekker:task-agent`) provides autonomous task completion:
 
 Invoke with `/trekker:task-agent` to let Claude work through tasks autonomously.
 
-### Hooks
+### Skills (7 skills)
 
-The plugin includes smart hooks for context management:
+| Skill | Description |
+|-------|-------------|
+| `trekker` | Core workflow guide for task management |
+| `planning` | Plan and track multi-step tasks before implementation |
+| `task-sync` | Synchronize Trekker with Claude's built-in TodoWrite |
+| `issue-tracking` | Suggest Trekker when user mentions issues, bugs, or tasks |
+| `search` | Search-first workflow for finding existing tasks |
+| `find-duplicates` | Detect duplicate tasks before creating new ones |
+| `smart-query` | Intelligent task querying |
+
+### Hooks (5 hooks)
+
+The plugin includes hooks for context management and workflow automation:
 
 **SessionStart** - When Claude Code starts:
 - Shows in-progress tasks with recent comments (resume context)
@@ -133,6 +146,15 @@ The plugin includes smart hooks for context management:
 - Lists all in-progress tasks with details
 - Shows recent comments for context preservation
 - Provides checkpoint comment template
+
+**Stop / SubagentStop** - When a task completes:
+- Scans the assistant's final message for completed task references
+- Automatically marks matching tasks as completed in Trekker
+- Shows next ready task to continue the workflow
+
+**PreToolUse** - Before TaskCreate/TaskUpdate/TodoWrite:
+- Blocks Claude's built-in task tools when Trekker is initialized
+- Redirects the agent to use Trekker MCP tools instead
 
 ## Usage
 
@@ -177,27 +199,33 @@ trekker comment add TREK-1 -a "claude" -c "Checkpoint: done X. Next: Y. Files: a
 ```
 trekker-claude-code/
 ├── .claude-plugin/
-│   ├── plugin.json           # Plugin metadata and hooks
+│   ├── plugin.json           # Plugin metadata and MCP server config
 │   └── marketplace.json      # Marketplace distribution config
 ├── mcp-server/
 │   ├── src/
 │   │   ├── index.ts          # MCP server entry
 │   │   ├── cli-runner.ts     # CLI execution utility
 │   │   ├── types.ts          # TypeScript types
-│   │   └── tools/            # MCP tool definitions
+│   │   └── tools/            # MCP tool definitions (26 tools)
 │   ├── package.json
 │   └── tsconfig.json
 ├── commands/                 # Slash command definitions (13 commands)
 ├── agents/
-│   └── task-agent.md         # Task completion agent
-├── skills/
-│   └── trekker/              # Trekker workflow skill
-│       ├── SKILL.md
-│       ├── README.md
-│       └── CLAUDE.md
+│   └── task-agent.md         # Autonomous task completion agent
+├── skills/                   # 7 skills for workflow automation
+│   ├── trekker/              # Core workflow skill
+│   ├── planning/             # Multi-step task planning
+│   ├── task-sync/            # TodoWrite synchronization
+│   ├── issue-tracking/       # Issue tracking suggestions
+│   ├── search/               # Search-first workflow
+│   ├── find-duplicates/      # Duplicate detection
+│   └── smart-query/          # Intelligent querying
 ├── hooks/
-│   ├── session-start.sh      # SessionStart hook script
-│   └── pre-compact.sh        # PreCompact hook script
+│   ├── hooks.json            # Hook configuration
+│   ├── session-start.sh      # SessionStart hook
+│   ├── pre-compact.sh        # PreCompact hook
+│   ├── task-completed.sh     # Stop/SubagentStop hook
+│   └── block-internal-tasks.sh  # PreToolUse hook
 └── docs/
     ├── state-management.md   # SQLite persistence and conflict handling
     └── plans/                # Design documents
