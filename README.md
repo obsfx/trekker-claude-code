@@ -132,7 +132,7 @@ Invoke with `/trekker:task-agent` to let Claude work through tasks autonomously.
 | `find-duplicates` | Detect duplicate tasks before creating new ones |
 | `smart-query` | Intelligent task querying |
 
-### Hooks (5 hooks)
+### Hooks (4 hooks)
 
 The plugin includes hooks for context management and workflow automation:
 
@@ -151,10 +151,6 @@ The plugin includes hooks for context management and workflow automation:
 - Scans the assistant's final message for completed task references
 - Automatically marks matching tasks as completed in Trekker
 - Shows next ready task to continue the workflow
-
-**PreToolUse** - Before TaskCreate/TaskUpdate/TodoWrite:
-- Blocks Claude's built-in task tools when Trekker is initialized
-- Redirects the agent to use Trekker MCP tools instead
 
 ## Usage
 
@@ -225,7 +221,6 @@ trekker-claude-code/
 │   ├── session-start.sh      # SessionStart hook
 │   ├── pre-compact.sh        # PreCompact hook
 │   ├── task-completed.sh     # Stop/SubagentStop hook
-│   └── block-internal-tasks.sh  # PreToolUse hook
 └── docs/
     ├── state-management.md   # SQLite persistence and conflict handling
     └── plans/                # Design documents

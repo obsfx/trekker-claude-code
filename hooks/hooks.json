@@ -1,17 +1,5 @@
 {
   "hooks": {
-    "PreToolUse": [
-      {
-        "matcher": "TaskCreate|TaskUpdate|TaskList|TaskGet|TodoWrite",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash ${CLAUDE_PLUGIN_ROOT}/hooks/block-internal-tasks.sh",
-            "timeout": 5
-          }
-        ]
-      }
-    ],
     "SessionStart": [
       {
         "matcher": "*",
